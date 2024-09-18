@@ -1,0 +1,55 @@
+<div class="modal fade" id="transactionModal" tabindex="-1"
+	aria-labelledby="transactionModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="transactionModalLabel">Transactions</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>From Wallet</th>
+							<th>To Wallet</th>
+							<th>Copper</th>
+							<th>Silver</th>
+							<th>Gold</th>
+							<th>Platinum</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="transaction : ${transactions}">
+							<td th:text="${transaction.fromWallet.name}"></td>
+							<td th:text="${transaction.toWallet.name}"></td>
+							<td th:text="${transaction.copper}"></td>
+							<td th:text="${transaction.silver}"></td>
+							<td th:text="${transaction.gold}"></td>
+							<td th:text="${transaction.platinum}"></td>
+							<td th:text="${transaction.transactionDate}" class="date-cell"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const options = {
+			year : 'numeric',
+			month : '2-digit',
+			day : '2-digit',
+			hour : '2-digit',
+			minute : '2-digit',
+			second : '2-digit'
+		};
+
+		document.querySelectorAll(".date-cell").forEach(function(cell) {
+			let date = new Date(cell.textContent);
+			cell.textContent = date.toLocaleDateString('en-GB', options);
+		});
+	});
+</script>

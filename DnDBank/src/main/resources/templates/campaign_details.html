@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+<title>Campaign Details</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous" />
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+	crossorigin="anonymous"></script>
+<link href="/style.css" rel="stylesheet">
+<script th:src="@{/javascript.js}" defer></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+	<div th:replace="/fragments/navbar" th:with="activePage='campaign'"></div>
+	<div class="container mt-4">
+		<div class="row">
+			<div class="col-md-8">
+				<h1 th:text="${campaign.name}"></h1>
+				<p>
+					<strong>DM:</strong> <span th:text="${dm.username}"></span> <br>
+					<strong>Join Code:</strong> <span th:text="${campaign.joinCode}"></span>
+				</p>
+				<a th:href="@{/campaign/{id}/settings (id=${campaign.id})}"
+					class="btn btn-light"> <i class="fas fa-cog"></i> Settings
+				</a>
+				<!-- WALLETS -->
+				<div class="row justify-content-left">
+					<div class="col-md-8 wallet" th:each="wallet:${wallets}">
+						<div class="card">
+							<div class="card-header text-center">
+								<h4 th:text="${wallet.name}"></h4>
+							</div>
+							<div class="card-body">
+								<div class="row text-center mb-3">
+									<div class="col">
+										<button class="btn btn-warning w-100 coin-button">
+											Copper<br> <span
+												th:if="${wallet.user.username == campaign.dm.username}">∞</span>
+											<span
+												th:unless="${wallet.user.username == campaign.dm.username}"
+												th:text="${wallet.copper}"></span>
+										</button>
+									</div>
+									<div class="col">
+										<button class="btn btn-secondary w-100 coin-button">
+											Silver<br> <span
+												th:if="${wallet.user.username == campaign.dm.username}">∞</span>
+											<span
+												th:unless="${wallet.user.username == campaign.dm.username}"
+												th:text="${wallet.silver}"></span>
+										</button>
+									</div>
+									<div class="col">
+										<button class="btn btn-warning text-white w-100 coin-button">
+											Gold<br> <span
+												th:if="${wallet.user.username == campaign.dm.username}">∞</span>
+											<span
+												th:unless="${wallet.user.username == campaign.dm.username}"
+												th:text="${wallet.gold}"></span>
+										</button>
+									</div>
+									<div class="col">
+										<button class="btn btn-light text-dark w-100 coin-button">
+											Platinum<br> <span
+												th:if="${wallet.user.username == campaign.dm.username}">∞</span>
+											<span
+												th:unless="${wallet.user.username == campaign.dm.username}"
+												th:text="${wallet.platinum}"></span>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="d-flex justify-content-between px-3 mb-3">
+								<button type="button" class="btn btn-secondary"
+									data-bs-toggle="modal" data-bs-target="#transactionModal">
+									View Transactions</button>
+								<button class="btn btn-primary" data-bs-toggle="modal"
+									data-bs-target="#sendCoinsModal">Send</button>
+							</div>
+						</div>
+						<div th:replace="fragments/send_coins_modal"></div>
+						<div th:replace="fragments/transaction_modal"></div>
+					</div>
+				</div>
+			</div>
+			<div th:replace="fragments/player_list"></div>
+		</div>
+	</div>
+	<div class="modal fade" id="errorModal" tabindex="-1"
+		aria-labelledby="errorModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="errorModalLabel">Error</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body" th:text="${errorMessage}"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		if ("[[${errorMessage}]]" !== '') {
+			var myModal = new bootstrap.Modal(document
+					.getElementById('errorModal'));
+			myModal.show();
+		}
+	</script>
+</body>
+</html>

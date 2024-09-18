@@ -1,0 +1,52 @@
+.coin-button {
+	height: 60px; /* Adjust height as needed */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-weight: bold;
+}
+
+.wallet {
+	margin-bottom: 1rem;
+	padding-bottom: 1rem;
+}
+
+.campaign-card {
+	margin-bottom: 1rem;
+}
+
+@media ( max-width : 767.98px) {
+	.campaign-card {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
+}
+
+.delete-container {
+	margin-top: 20px;
+}
+
+.btn-danger {
+	margin: 0;
+}
+
+.wallet {
+	margin-top: 20px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.transaction-records {
+    max-height: 400px;
+    overflow-y: auto;
+}
