@@ -35,7 +35,7 @@
 					<div class="col-md-8 wallet" th:each="wallet:${wallets}">
 						<div class="card">
 							<div class="card-header text-center">
-								<h4 th:text="${wallet.name}"></h4>
+								<h4 th:text="${wallet.user.username} + '\'s ' + ${wallet.name} + ' ' + ${wallet.id}"></h4>
 							</div>
 							<div class="card-body">
 								<div class="row text-center mb-3">
@@ -81,11 +81,13 @@
 								<button type="button" class="btn btn-secondary"
 									data-bs-toggle="modal" data-bs-target="#transactionModal">
 									View Transactions</button>
-								<button class="btn btn-primary" data-bs-toggle="modal"
-									data-bs-target="#sendCoinsModal">Send</button>
+								<form th:action="@{/campaign/sendCoins}" method="post">
+									<input type="hidden" th:value=${campaign.id} name="campaignId">
+									<input type="hidden" th:value="${wallet.id}" name="fromWalletId">
+									<input type="submit" class="btn btn-primary" value="Send">
+								</form>
 							</div>
 						</div>
-						<div th:replace="fragments/send_coins_modal"></div>
 						<div th:replace="fragments/transaction_modal"></div>
 					</div>
 				</div>

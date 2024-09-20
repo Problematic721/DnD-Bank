@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class CampaignController {
@@ -128,8 +129,19 @@ public class CampaignController {
 		campaignService.updateCampaign(id, newCampaignName);
 		return null;
 	}
-
+	
 	@PostMapping("/campaign/sendCoins")
+	public String showWallet(@RequestParam Long campaignId, @RequestParam Long fromWalletId, Model model) {
+		Campaign campaign = campaignService.getCampaignById(campaignId);
+		Wallet fromWallet = walletService.findById(fromWalletId);
+		Set<User> users = campaign.getUsers();
+		model.addAttribute("campaign", campaign);
+		model.addAttribute("fromWallet", fromWallet);
+		model.addAttribute("users", users);
+		return "send_coins";
+	}
+	
+	@PostMapping("/campaign/sendCoins/send")
 	public String sendCoins(@RequestParam Long campaignId, @RequestParam Long fromWalletId,
 			@RequestParam Long toWalletId, @RequestParam int copper, @RequestParam int silver, @RequestParam int gold,
 			@RequestParam int platinum, Model model, @AuthenticationPrincipal UserDetails userDetails) {

@@ -26,7 +26,7 @@ function updateWalletOptions() {
 
     const selectedUser = receiverSelect.value;
 	
-    walletSelect.disabled = false;
+    walletSelect.disabled = '';
 
     if (selectedUser) {
         fetch(`/getUserWallets?username=${selectedUser}&campaignId=${campaignId}`)
@@ -42,4 +42,5 @@ function updateWalletOptions() {
             .catch(error => console.error('Error fetching wallets:', error));
     }
 }
-window.onload = updateWalletOptions;
+
+
