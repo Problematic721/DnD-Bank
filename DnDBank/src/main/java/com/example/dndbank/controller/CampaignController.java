@@ -10,6 +10,7 @@ import com.example.dndbank.service.UserService;
 import com.example.dndbank.service.WalletService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -82,6 +83,17 @@ public class CampaignController {
 		model.addAttribute("wallets", wallets);
 		model.addAttribute("transactions", transactions);
 		return "campaign_details";
+	}
+	
+	@PostMapping("/campaign/{id}/regenerateJoinCode")
+	public String regenerateJoinCode(@PathVariable("id") Long campaignId, @AuthenticationPrincipal UserDetails userDetails) {
+		Campaign  campaign = campaignService.getCampaignById(campaignId);
+		User currentUser = userService.findByUsername(userDetails.getUsername());
+		if (!campaign.getDm().getUsername().equals(currentUser.getUsername())) {
+	        throw new AccessDeniedException("Only the DM can regenerate the join code");
+	    }
+		campaignService.regenerateJoinCode(campaignId);
+        return "redirect:/campaign/" + campaignId + "/settings";
 	}
 
 	@PostMapping("/campaign/{id}/kick/{userId}")

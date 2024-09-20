@@ -8,7 +8,9 @@ import com.example.dndbank.repository.UserRepository;
 import com.example.dndbank.repository.WalletRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +28,6 @@ public class CampaignService {
 	
 	@Autowired
     private WalletRepository walletRepository;
-	
-	@Autowired
-    private TransactionService transactionService;
 
 	private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	private static final int CODE_LENGTH = 6;
@@ -80,6 +79,17 @@ public class CampaignService {
 		} else {
 			return "Invalid campaign code.";
 		}
+	}
+	
+	public Campaign regenerateJoinCode (Long campaignId) {
+		Campaign campaign = campaignRepository.findById(campaignId)
+				.orElseThrow(()->new RuntimeException("Campaign Not Found"));
+		
+		String newJoinCode = generateUniqueJoinCode();
+		campaign.setJoinCode(newJoinCode);
+		campaignRepository.save(campaign);
+		return campaign;
+	    
 	}
 
 	private String generateUniqueJoinCode() {
