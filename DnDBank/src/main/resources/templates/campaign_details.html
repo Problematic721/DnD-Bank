@@ -35,7 +35,7 @@
 					<div class="col-md-8 wallet" th:each="wallet:${wallets}">
 						<div class="card">
 							<div class="card-header text-center">
-								<h4 th:text="${wallet.user.username} + '\'s ' + ${wallet.name} + ' ' + ${wallet.id}"></h4>
+								<h4 th:text="${wallet.user.username} + '\'s ' + ${wallet.name}"></h4>
 							</div>
 							<div class="card-body">
 								<div class="row text-center mb-3">

@@ -28,6 +28,7 @@ public class Transaction {
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
 
+    @Column(nullable = false)
     private LocalDateTime transactionDate;
     
     public Transaction() {}

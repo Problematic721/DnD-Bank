@@ -1,6 +1,5 @@
 package com.example.dndbank.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,8 @@ import com.example.dndbank.model.Transaction;
 import com.example.dndbank.model.User;
 import com.example.dndbank.model.Wallet;
 import com.example.dndbank.repository.TransactionRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class TransactionService {
@@ -36,7 +37,8 @@ public class TransactionService {
     public List<Transaction> getTransactionsForDM(Campaign campaign) {
         return transactionRepository.findByCampaign(campaign);
     }
-
+    
+    @Transactional
 	public void saveTransaction(Wallet fromWallet, Wallet toWallet, int copper, int silver, int gold, int platinum,
 			Campaign campaign) {
 		Transaction transaction = new Transaction(fromWallet, toWallet, copper, silver, gold, platinum, campaign);

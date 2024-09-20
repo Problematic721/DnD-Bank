@@ -22,13 +22,15 @@
 					</thead>
 					<tbody>
 						<tr th:each="transaction : ${transactions}">
-							<td th:text="${transaction.fromWallet.name}"></td>
-							<td th:text="${transaction.toWallet.name}"></td>
+							<td
+								th:text="${transaction.fromWallet.user.username} + '\'s ' + ${transaction.fromWallet.name}"></td>
+							<td
+								th:text="${transaction.toWallet.user.username} + '\'s ' + ${transaction.toWallet.name}"></td>
 							<td th:text="${transaction.copper}"></td>
 							<td th:text="${transaction.silver}"></td>
 							<td th:text="${transaction.gold}"></td>
 							<td th:text="${transaction.platinum}"></td>
-							<td th:text="${transaction.transactionDate}" class="date-cell"></td>
+							<td><span th:text="${#temporals.format(transaction.transactionDate, 'yyyy-MM-dd HH:mm')}"></span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -36,20 +38,3 @@
 		</div>
 	</div>
 </div>
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
-		const options = {
-			year : 'numeric',
-			month : '2-digit',
-			day : '2-digit',
-			hour : '2-digit',
-			minute : '2-digit',
-			second : '2-digit'
-		};
-
-		document.querySelectorAll(".date-cell").forEach(function(cell) {
-			let date = new Date(cell.textContent);
-			cell.textContent = date.toLocaleDateString('en-GB', options);
-		});
-	});
-</script>

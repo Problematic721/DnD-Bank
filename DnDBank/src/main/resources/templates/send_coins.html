@@ -17,7 +17,6 @@
 <body>
 	<div th:replace="/fragments/navbar" th:with="activePage='campaign'"></div>
 	<div class="container mt-4">
-		<p th:text="'Campaign ID: ' + ${campaign.id}"></p>
 		<form th:action="@{/campaign/sendCoins/send}" method="post">
 			<input type="hidden" th:value="${fromWallet.id}" name="fromWalletId" id="fromWalletId">
 			<input type="hidden" th:value="${campaign.id}" name="campaignId" id="campaignId">
