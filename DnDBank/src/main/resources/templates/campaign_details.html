@@ -82,6 +82,7 @@
 									data-bs-toggle="modal" data-bs-target="#transactionModal">
 									View Transactions</button>
 								<form th:action="@{/campaign/sendCoins}" method="post">
+								<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 									<input type="hidden" th:value=${campaign.id} name="campaignId">
 									<input type="hidden" th:value="${wallet.id}" name="fromWalletId">
 									<input type="submit" class="btn btn-primary" value="Send">

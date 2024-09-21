@@ -29,6 +29,7 @@
 						<form action="/register" th:action="@{/register}"
 							th:object="${user}" method="post" id="registrationForm"
 							novalidate>
+							<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
 							<div class="form-group mb-3">
 								<label for="username">Username</label> <input type="text"
 									id="username" class="form-control" placeholder="Enter username"
