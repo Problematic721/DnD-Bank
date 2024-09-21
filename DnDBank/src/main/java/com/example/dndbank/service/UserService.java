@@ -20,9 +20,6 @@ public class UserService implements UserDetailsService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private WalletService walletService;
 
 	public boolean authenticate(String username, String password) {
 		Optional<User> userOptional = userRepository.findByUsername(username);
@@ -77,5 +74,17 @@ public class UserService implements UserDetailsService {
 	public User findById(Long userId) {
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	}
+
+	public void updateUser(User user) {
+		User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new UsernameNotFoundException(""));
+		existingUser.setUsername(user.getUsername());
+		existingUser.setEmail(user.getEmail());
+		userRepository.save(existingUser);
+	}
+
+	public void updatePassword(User user, String newPassword) {
+		user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
 	}
 }

@@ -62,11 +62,11 @@ public class CampaignController {
 		return "redirect:/campaign";
 	}
 
-	@GetMapping("/campaign/{id}")
-	public String viewCampaignDetail(@PathVariable Long id, Model model,
+	@GetMapping("/campaign/{campaignId}")
+	public String viewCampaignDetail(@PathVariable Long campaignId, Model model,
 			@AuthenticationPrincipal UserDetails userDetails) {
 		User user = userService.findByUsername(userDetails.getUsername());
-		Campaign campaign = campaignService.getCampaignById(id);
+		Campaign campaign = campaignService.getCampaignById(campaignId);
 		List<Wallet> wallets;
 		List<Transaction> transactions;
 		boolean isDm = campaign.getDm().equals(user);
@@ -78,15 +78,27 @@ public class CampaignController {
 			transactions = transactionService.getTransactionsForUsers(user, campaign);
 		}
 		model.addAttribute("campaign", campaign);
-		model.addAttribute("users", campaignService.getAllPlayerById(id));
+		model.addAttribute("users", campaignService.getAllPlayerById(campaignId));
 		model.addAttribute("dm", campaign.getDm());
 		model.addAttribute("wallets", wallets);
 		model.addAttribute("transactions", transactions);
 		return "campaign_details";
 	}
 	
-	@PostMapping("/campaign/{id}/regenerateJoinCode")
-	public String regenerateJoinCode(@PathVariable("id") Long campaignId, @AuthenticationPrincipal UserDetails userDetails) {
+	@PostMapping("/campaign/{campaignId}/updateName")
+	public String updateCampaignName(@PathVariable Long campaignId, @RequestParam String newCampaignName,
+            @AuthenticationPrincipal UserDetails userDetails) {
+		Campaign campaign = campaignService.getCampaignById(campaignId);
+		User currentUser = userService.findByUsername(userDetails.getUsername());
+		if (!campaign.getDm().getUsername().equals(currentUser.getUsername())) {
+			throw new AccessDeniedException("Only the DM can update the campaign name");
+        }
+		campaignService.updateCampaign(campaignId, newCampaignName);
+		return "redirect:/campaign/" + campaignId ;
+	}
+	
+	@PostMapping("/campaign/{campaignId}/regenerateJoinCode")
+	public String regenerateJoinCode(@PathVariable Long campaignId, @AuthenticationPrincipal UserDetails userDetails) {
 		Campaign  campaign = campaignService.getCampaignById(campaignId);
 		User currentUser = userService.findByUsername(userDetails.getUsername());
 		if (!campaign.getDm().getUsername().equals(currentUser.getUsername())) {
@@ -117,28 +129,28 @@ public class CampaignController {
 		}
 	}
 
-	@GetMapping("/campaign/{id}/settings")
-	public String editCampaignSettings(@PathVariable Long id, Model model,
+	@GetMapping("/campaign/{campaignId}/settings")
+	public String editCampaignSettings(@PathVariable Long campaignId, Model model,
 			@AuthenticationPrincipal UserDetails userDetails) {
-		Campaign campaign = campaignService.getCampaignById(id);
+		Campaign campaign = campaignService.getCampaignById(campaignId);
 		if (!campaign.getDm().getUsername().equals(userDetails.getUsername())) {
 			return "errors/unauthorized";
 		}
-		List<User> users = campaignService.getAllPlayerById(id);
+		List<User> users = campaignService.getAllPlayerById(campaignId);
 		model.addAttribute("campaign", campaign);
 		model.addAttribute("users", users);
 		model.addAttribute("dm", campaign.getDm());
 		return "campaign_settings";
 	}
 
-	@PostMapping("/campaign/{id}/settings")
-	public String updateCampaignSettings(@PathVariable Long id, @RequestParam String newCampaignName,
+	@PostMapping("/campaign/{campaignId}/settings")
+	public String updateCampaignSettings(@PathVariable Long campaignId, @RequestParam String newCampaignName,
 			@AuthenticationPrincipal UserDetails userDetails) {
-		Campaign campaign = campaignService.getCampaignById(id);
+		Campaign campaign = campaignService.getCampaignById(campaignId);
 		if (campaign.getDm().getUsername() != userDetails.getUsername()) {
 			return "errors/unauthorized";
 		}
-		campaignService.updateCampaign(id, newCampaignName);
+		campaignService.updateCampaign(campaignId, newCampaignName);
 		return null;
 	}
 	
