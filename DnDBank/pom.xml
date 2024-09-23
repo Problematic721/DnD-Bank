@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>DnDWallet-1</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>DnDWallet-1</name>
+	<artifactId>DnDBank</artifactId>
+	<version>1.0</version>
+	<name>DnDBank</name>
 	<description>Web Wallet for DnD Sessions</description>
 	<url />
 	<licenses>
