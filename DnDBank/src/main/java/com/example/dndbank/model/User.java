@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 @Entity
+@Table(name = "player")
 public class User {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
