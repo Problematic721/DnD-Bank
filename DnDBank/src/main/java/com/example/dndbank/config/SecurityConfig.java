@@ -7,18 +7,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+        	.csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            )
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/register", "/login", "/resetPassword", "/resources/**", "/static/**", "/error").permitAll()
                 .anyRequest().authenticated()
@@ -34,7 +38,12 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
                 .permitAll()
-            );
+            )
+            .rememberMe(rememberMe -> rememberMe
+            		.key(null)
+            		.tokenValiditySeconds(86400)
+            		.rememberMeParameter("rememberMe")
+            		);
         return http.build();
     }
 }
