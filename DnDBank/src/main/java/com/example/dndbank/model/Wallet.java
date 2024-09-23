@@ -1,19 +1,14 @@
 package com.example.dndbank.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "wallet")
 public class Wallet {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private boolean permanent;
 	private int copper;
 	private int silver;
 	private int gold;
@@ -29,9 +24,8 @@ public class Wallet {
 	
 	public Wallet() {}
 	
-	public Wallet(String name, boolean permanent, User user) {
+	public Wallet(String name, User user) {
 		this.name = name;
-        this.permanent = permanent;
         this.user = user;
 	}
 	
@@ -89,14 +83,6 @@ public class Wallet {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public boolean isPermanent() {
-		return permanent;
-	}
-
-	public void setPermanent(boolean permanent) {
-		this.permanent = permanent;
 	}
 
 	public Campaign getCampaign() {

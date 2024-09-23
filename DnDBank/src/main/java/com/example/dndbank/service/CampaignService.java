@@ -69,7 +69,6 @@ public class CampaignService {
 		        wallet.setName("Personal Wallet");
 		        wallet.setUser(user);
 		        wallet.setCampaign(campaign);
-		        wallet.setPermanent(true);
 		        walletRepository.save(wallet);
 
 				return "Successfully joined the campaign.";
