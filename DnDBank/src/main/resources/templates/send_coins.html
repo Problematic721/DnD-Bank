@@ -15,7 +15,7 @@
 <title>Send Coins</title>
 </head>
 <body>
-	<div th:replace="/fragments/navbar" th:with="activePage='campaign'"></div>
+	<div th:replace="fragments/navbar" th:with="activePage='campaign'"></div>
 	<div class="container mt-4">
 		<form th:action="@{/campaign/sendCoins/send}" method="post">
 		<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
